@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t my_airflow .'
+            }
+        }
+        stage('Style') {
+            steps {
+                script {
+                    // Run the 'check-format' target from the Makefile
+                    sh 'make check-format'
+                    // Run the 'check-style' target from the Makefile
+                    sh 'make check-style'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    // Run the 'test' target from the Makefile
+                    sh 'make test'
+                }
+            }
+        }
+        // stage('Deploy') {
+        //     steps {
+        //         script {
+        //             def appName = 'my-airflow-app'
+        //             def helmRelease = 'my-airflow-release'
+
+        //             sh 'helm upgrade --install ${helmRelease} ./charts/airflow -f values.yaml --namespace=my-namespace'
+        //         }
+        //     }
+        // }
+    }
+    post {
+        success {
+            echo 'CI/CD pipeline completed successfully!'
+        }
+        failure {
+            echo 'CI/CD pipeline failed!'
+        }
+    }
+}

@@ -1,0 +1,21 @@
+version: '3'
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    ports:
+      - "5432:5432"
+
+  airflow:
+    image: my_airflow:latest
+    ports:
+      - "8080:8080"  # Airflow web UI
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__WEBSERVER__SECRET_KEY=your_secret_key  # Replace with a secret key
+    volumes:
+      - .:/lincoln
+      - ./dags:/opt/airflow/dags
+    depends_on:
+      - postgres
