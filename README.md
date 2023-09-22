@@ -22,6 +22,7 @@ To improve the performance of the code, first of all we'd need:
  - Setup airflow environment, add the deploy step in the jenkins and setup jenkins (if that's what we'll go with) and add a deployment configuration.
  - Use the generate_json or the query from within a dag, as I explained before, we'd need one operator to save the result of the query in a temporary table and another to extract the result either to a local folder or to an object store like GCS.
  - If the population of the database is also supposed to be handled by the dag, then I would have it done separately in a different dag, with one task for each table, using a PythonOperator to run the populate table function.
+ - And lock the versions of the dependencies in the requirments.txt file.
 
  ## SQL
 
